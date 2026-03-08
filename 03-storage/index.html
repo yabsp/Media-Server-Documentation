@@ -870,8 +870,8 @@ absolutely be no problem for what we are planning with our server.</p>
 <p>We need the necessary software packages to handle the pool and different
 filesystems (like exFAT for migration).</p>
 <pre><code class="language-bash"># Install MergerFS and filesystem tools 
-sudo apt update s
-udo apt install mergerfs fuse3 exfatprogs
+sudo apt update 
+sudo apt install mergerfs fuse3 exfatprogs
 </code></pre>
 <h2 id="disk-preparation">Disk Preparation</h2>
 <h3 id="identifying-drives">Identifying Drives</h3>
@@ -881,7 +881,7 @@ udo apt install mergerfs fuse3 exfatprogs
 lsblk -f
 </code></pre>
 <h3 id="formatting-to-ext4">Formatting to ext4</h3>
-<p>Linux works best with the filesystem. When preparing a new drive for
+<p>Linux works best with the <code>ext4</code> filesystem. When preparing a new drive for
 media storage, we use specific flags to maximize usable space.</p>
 <p><strong>Warning:</strong> This command wipes all data on the target drive!</p>
 <pre><code class="language-bash"># Format the drive (Replace sdX with actual identifier)

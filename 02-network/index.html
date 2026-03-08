@@ -1184,7 +1184,7 @@
 
 <h1 id="initial-configuration">Initial Configuration</h1>
 <h2 id="user-management">User Management</h2>
-<p>Since we skipped the root password, our created user (let's call him or
+<p>Since we skipped the root password, our created user (let's call him <code>joachim</code> or
 similar) has rights.</p>
 <h3 id="verifying-sudo-access">Verifying Sudo Access</h3>
 <p>To verify that the user can perform administrative tasks:</p>
@@ -1201,12 +1201,12 @@ sudo apt update
 <h2 id="dedicated-service-user-setup">Dedicated Service User Setup</h2>
 <p>For security and clean permission management, we do not run the
 applications as the administrative user. Instead, we create a dedicated
-system user (named ) for all Docker containers.</p>
+system user (named m<code>media</code>) for all Docker containers.</p>
 <h3 id="creating-the-media-user">Creating the Media User</h3>
 <p>We create a system user with a specific UID and disable login
 capabilities for security.</p>
 <pre><code class="language-bash"># Create user 'media' with UID 13000, create matching group, no login
-shell sudo useradd -u 13000 -U -d /bin/false -s /bin/false media
+sudo useradd -u 13000 -U -d /bin/false -s /bin/false media
 
 # Verify creation id media
 # Output: uid=13000(media) gid=13000(media)
@@ -1240,8 +1240,7 @@ and group members (us).</p>
 sudo chown -R media:media /mnt/data
 
 # Set permissions (User=RWX, Group=RWX, Others=RX) 
-sudo chmod -R 775
-/mnt/data/
+sudo chmod -R 775 /mnt/data/
 </code></pre>
 <p><em>NB: r = 4, w = 2, x = 1</em></p>
 <h3 id="enforcing-read-only-access-for-plex">Enforcing Read-Only Access for Plex</h3>
@@ -1335,7 +1334,7 @@ ssh-keygen -t ed25519 -C &quot;my-laptop&quot;
 <h3 id="2-copying-the-public-key-to-the-server">2. Copying the Public Key to the Server</h3>
 <p>We transfer the public part of the key to the server using <code>ssh-copy-id</code>.</p>
 <pre><code class="language-bash"># Replace user and IP with your server details 
-ssh-copy-id -i /.ssh/id_ed25519.pub user@192.168.0.50
+ssh-copy-id -i ~/.ssh/id_ed25519.pub user@192.168.0.50
 </code></pre>
 <h3 id="3-verifying-and-hardening">3. Verifying and Hardening</h3>
 <p>Try to log in again. You should not be asked for a password. Once
