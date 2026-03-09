@@ -141,17 +141,16 @@ services:
     restart: unless-stopped
 
   # ==========================================
-  # OVERSEERR
+  # SEERR
   # ==========================================
-  overseerr:
-    image: lscr.io/linuxserver/overseerr:latest
-    container_name: overseerr
+  seerr:
+    image: ghcr.io/seerr-team/seerr:latest
+    container_name: seerr
+    user: "13000:13000"
     environment:
-      - PUID=13000
-      - PGID=13000
       - TZ=Europe/Zurich
     volumes:
-      - ~/docker/config/overseerr:/config
+      - ~/docker/config/seerr:/app/config
     ports:
       - 5055:5055
     restart: unless-stopped
@@ -218,7 +217,7 @@ services:
 Because we are using an Intel i5-12600K (12th Gen), we need to ensure
 the container can access the iGPU.
 
-### Verify Device Existence {#verify-device-existence .unnumbered}
+### Verify Device Existence
 
 Check if the rendering device exists on the host:
 

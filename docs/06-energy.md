@@ -50,7 +50,7 @@ Add a block for **each** mechanical HDD at the end of the file:
 }
 ```
 
-**Note:** A spindown time of 30--60 minutes is recommended. Setting it
+*Note:* A spindown time of 30--60 minutes is recommended. Setting it
 too short (e.g., 5 mins) causes frequent start-stop cycles, which wears
 out the drive mechanics.
 

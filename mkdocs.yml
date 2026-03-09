@@ -27,5 +27,5 @@ nav:
       - Storage (MergerFS): 03-storage.md
       - Energy Optimization: 06-energy.md
   - Containers & Routing:
-      - Docker Services: 04-docker.md
+      - Docker & Services: 04-docker.md
       - VPS Gateway: 05-vps.md
