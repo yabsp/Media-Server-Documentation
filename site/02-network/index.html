@@ -1413,7 +1413,7 @@ sudo ufw allow from 192.168.0.1/24 to any port 6789 proto tcp
 </code></pre>
 <p><strong>Note</strong>: Since we are using docker to deploy these tools we don't really need to allow these ports as is allowed docker to bypass ufw rules.</p>
 <h3 id="enabling-the-firewall">Enabling the Firewall</h3>
-<p><strong>Warning:</strong> Ensure the SSH rule (Section 2.6.1) matches your current IP
+<p><strong>Warning:</strong> Ensure the SSH rule (Section <a href="./#ssh-server-installation">SSH Server Installation</a>) matches your current IP
 address, or you might lock yourself out immediately.</p>
 <pre><code class="language-bash"># Enable UFW 
 sudo ufw enable
