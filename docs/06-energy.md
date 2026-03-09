@@ -64,6 +64,6 @@ sudo hdparm -C /dev/sd?
 
 *Output:*
 
-- `drive state is: active/idle` $\rightarrow$ Drive is spinning (consuming power).
+- `drive state is: active/idle` -> Drive is spinning (consuming power).
 
-- `rive state is: standby`$\rightarrow$ Drive is sleeping (saving power).
+- `rive state is: standby`-> Drive is sleeping (saving power).

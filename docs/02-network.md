@@ -2,7 +2,7 @@
 
 ## User Management
 
-Since we skipped the root password, our created user (let's call him or
+Since we skipped the root password, our created user (let's call him `joachim` or
 similar) has rights.
 
 ### Verifying Sudo Access
@@ -29,7 +29,7 @@ sudo hostnamectl set-hostname mediaserver
 
 For security and clean permission management, we do not run the
 applications as the administrative user. Instead, we create a dedicated
-system user (named ) for all Docker containers.
+system user (named m`media`) for all Docker containers.
 
 ### Creating the Media User
 
@@ -38,27 +38,31 @@ capabilities for security.
 
 ```bash
 # Create user 'media' with UID 13000, create matching group, no login
-shell sudo useradd -u 13000 -U -d /bin/false -s /bin/false media
+sudo useradd -u 13000 -U -d /bin/false -s /bin/false media
 
 # Verify creation id media
 # Output: uid=13000(media) gid=13000(media)
 groups=13000(media)
 ```
 
--   **PUID:** 13000
+- **PUID:** 13000
 
--   **PGID:** 13000
+- **PGID:** 13000
 
--   `-U`: Creates a Group with the same name () and ID.
+- `-U`: Creates a Group with the same name () and ID.
 
--   `-s /bin/false`: Disable login.
+- `-s /bin/false`: Disable login.
 
--   `-d /bin/false`: No home directory.
+- `-d /bin/false`: No home directory.
 
 ### Granting Access to the Admin User
 
 To ensure that we (the logged-in admin) can still manually manage files
 in the storage pool, we add our current user to the new group.
+
+```bash
+sudo usermod -a -G media joachim
+```
 
 ### Applying Filesystem Permissions
 
@@ -71,8 +75,7 @@ and group members (us).
 sudo chown -R media:media /mnt/data
 
 # Set permissions (User=RWX, Group=RWX, Others=RX) 
-sudo chmod -R 775
-/mnt/data/
+sudo chmod -R 775 /mnt/data/
 ```
 
 *NB: r = 4, w = 2, x = 1*
@@ -85,11 +88,11 @@ should not modify media files.
 Instead of complex filesystem ACLs, we will handle this at the Docker
 level later.
 
--   All containers run as `PUID=13000`.
+- All containers run as `PUID=13000`.
 
--   Sonarr/Radarr mount volumes as **Read-Write**.
+- Sonarr/Radarr mount volumes as **Read-Write**.
 
--   Plex mounts the media volume with the `:ro` (Read-Only) flag in Docker
+- Plex mounts the media volume with the `:ro` (Read-Only) flag in Docker
     Compose (see chapter #04-docker.md).
 
 ## Network Configuration
@@ -190,7 +193,7 @@ We transfer the public part of the key to the server using `ssh-copy-id`.
 
 ```bash
 # Replace user and IP with your server details 
-ssh-copy-id -i /.ssh/id_ed25519.pub user@192.168.0.50
+ssh-copy-id -i ~/.ssh/id_ed25519.pub user@192.168.0.50
 ```
 
 ### 3. Verifying and Hardening

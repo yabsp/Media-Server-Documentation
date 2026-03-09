@@ -44,7 +44,7 @@ sysctl --system
 
 We are using WireGuard to connect our media server with our VPS. There
 are some guides out there that ease the pain when setting up the whole
-thing - for example [one for Ubuntu 20.04](https://www.digitalocean.com/community/tutorials/how-to-set-up-wireguard-on-ubuntu-20-04)) that can be used for other
+thing - for example [one for Ubuntu 20.04](https://www.digitalocean.com/community/tutorials/how-to-set-up-wireguard-on-ubuntu-20-04) that can be used for other
 versons and distros as well.
 WireGuard uses asymmetric cryptography. We must generate key pairs
 (Private/Public) on both the VPS and the Home Server.
@@ -97,8 +97,7 @@ VPS and uses `PersistentKeepalive` to keep the NAT session open through the home
 
 ```bash
 # 1. Install WireGuard on Home Server 
-sudo apt update && sudo apt
-install wireguard -y
+sudo apt update && sudo apt install wireguard -y
 
 # 2. Configure the Interface 
 sudo nano /etc/wireguard/wg0.conf
@@ -106,11 +105,11 @@ sudo nano /etc/wireguard/wg0.conf
 
 ```conf
 [Interface] 
-# The Internal IP of the Home
-Server Address = 10.10.10.2/24 
+# The Internal IP of the Home Server
+Address = 10.10.10.2/24 
 PrivateKey = <HOME_PRIVATE_KEY>
 
-[Peer] \# Connection details for the VPS 
+[Peer] # Connection details for the VPS 
 PublicKey = <VPS_PUBLIC_KEY> 
 # The Public IP of the VPS and the custom port defined earlier 
 # Use this port or any other port you defined (keep in mind that a random port is better)
@@ -142,7 +141,7 @@ tunnel to the home server.
 
 ```bash
 # 1. Install Docker on VPS 
-curl -fsSL https://get.docker.com \| sh
+curl -fsSL https://get.docker.com | sh
 
 # 2. Create Directory and Config 
 mkdir -p  ~/nginx-proxy && cd ~/nginx-proxy 
@@ -150,7 +149,7 @@ nano docker-compose.yml
 ```
 
 ```conf
- services:
+services:
   app:
     image: 'jc21/nginx-proxy-manager:latest'
     restart: unless-stopped
@@ -218,21 +217,20 @@ port open.
 
 ### Cloudflare API Token
 
-1.  Go to Cloudflare Dashboard > My Profile > API Tokens.
+1. Go to Cloudflare Dashboard > My Profile > API Tokens.
 
-2.  Create a token using the **Edit zone DNS** template for your
-    specific domain.
+2. Create a token using the **Edit zone DNS** template for your specific domain.
 
-3.  Copy the generated Token.
+3. Copy the generated Token.
 
 ### Configure NPM for DNS Challenge
 In Nginx Proxy Manager, edit the Proxy Host:
 
--   **SSL Tab:** Check \"Use a DNS Challenge\".
+- **SSL Tab:** Check "Use a DNS Challenges".
 
--   **Provider:** Cloudflare.
+- **Provider:** Cloudflare.
 
--   **Credentials:** Replace the token placeholder:
+- **Credentials:** Replace the token placeholder:
 
     ```conf
     dns_cloudflare_api_token = <YOUR_CLOUDFLARE_TOKEN>
@@ -243,15 +241,13 @@ In Nginx Proxy Manager, edit the Proxy Host:
 With DNS validation active, we can close Port 80. The only open ingress
 ports are now for the VPN tunnel and the encrypted HTTPS stream.
 
-``` center
-  **Port**   **Protocol**   **Status**   **Reason**
-  ---------- -------------- ------------ ------------------------------
-  22         TCP            Allow        SSH Management
-  443        TCP            Allow        HTTPS Streaming
-  51821      UDP            Allow        WireGuard Tunnel
-  **80**     **TCP**        **DENY**     **Not needed (DNS-01 used)**
-  **81**     **TCP**        **DENY**     **Admin UI (Tunnel only)**
-```
+| Port  | Protocol | Status | Reason                         |
+|------|----------|--------|--------------------------------|
+| 22   | TCP      | Allow  | SSH Management                 |
+| 443  | TCP      | Allow  | HTTPS Streaming                |
+| 51821| UDP      | Allow  | WireGuard Tunnel               |
+| 80   | TCP      | DENY   | Not needed (DNS-01 used)       |
+| 81   | TCP      | DENY   | Admin UI (Tunnel only)         |
 
 ### Secure Admin Access via SSH Tunnel
 
@@ -282,34 +278,25 @@ we implement **CrowdSec**.
 (IPS). Unlike legacy tools like Fail2Ban,
 it works on a collaborative model:
 
-1.  **Detect (The Agent):** It analyzes log files (Nginx, SSH, System)
-    in real-time to detect aggressive behavior.
+1. **Detect (The Agent):** It analyzes log files (Nginx, SSH, System) in real-time to detect aggressive behavior.
 
-2.  **Protect (The Bouncer):** Once a threat is detected, the
-    "Bouncer" interacts with the firewall to drop the connection
-    immediately.
+2.**Protect (The Bouncer):** Once a threat is detected, the "Bouncer" interacts with the firewall to drop the connection immediately.
 
-3.  **Share (The Crowd):** When your server blocks an IP for malicious
-    activity, this information is shared with the global CrowdSec
-    community. Conversely, your server automatically receives a
-    blacklist of IPs that have attacked other users, blocking them
-    before they even touch your server.
+3. **Share (The Crowd):** When your server blocks an IP for malicious activity, this information is shared with the global CrowdSec community. Conversely, your server automatically receives a blacklist of IPs that have attacked other users, blocking them before they even touch your server.
 
 ### Architecture Setup
 We use a hybrid setup:
 
--   **The Agent** runs inside a **Docker container**. It reads the logs.
+- **The Agent** runs inside a **Docker container**. It reads the logs.
 
--   **The Bouncer** runs directly on the **Host System (VPS)**. It
-    manages the `iptables` firewall rules.
+- **The Bouncer** runs directly on the **Host System (VPS)**. It manages the `iptables` firewall rules.
 
 ### 1. Docker Compose Modification (The Agent)
 We modify the `docker-compose.yml` to add CrowdSec. **Critical Changes:**
 
--   We map the host's `auth.log` to protect SSH.
+- We map the host's `auth.log` to protect SSH.
 
--   We expose Port `8080` to localhost so the Host-Bouncer can talk to the
-    Docker-Agent.
+- We expose Port `8080` to localhost so the Host-Bouncer can talk to the Docker-Agent.
 
 ```yaml
 services:
@@ -431,11 +418,11 @@ immediately receive the full "Community Blocklist" (approx. 20,000+
 malicious IPs) and visualize attacks, we enroll the instance in the
 CrowdSec Console.
 
-1.  Go to [https://app.crowdsec.net](https://app.crowdsec.net) and create a free account.
+1. Go to [https://app.crowdsec.net](https://app.crowdsec.net) and create a free account.
 
-2.  Select "Enroll my first instance" to receive an enrollment key.
+2. Select "Enroll my first instance" to receive an enrollment key.
 
-3.  Run the enrollment command inside the Docker container:
+3. Run the enrollment command inside the Docker container:
 
 ```bash
 # Replace <KEY> with the code from the website 
@@ -450,7 +437,7 @@ about 5-10 minutes. Afterward, verify that your server has protected
 itself against thousands of known bad actors:
 
 ```bash
-\# Check the number of banned IPs from the Community List 
+# Check the number of banned IPs from the Community List 
 docker exec -t nginx-proxy-crowdsec-1 cscli decisions list --origin CAPI -a | grep -v "No decisions" | wc -l
 ```
 

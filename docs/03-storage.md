@@ -13,8 +13,8 @@ filesystems (like exFAT for migration).
 
 ```bash
 # Install MergerFS and filesystem tools 
-sudo apt update s
-udo apt install mergerfs fuse3 exfatprogs
+sudo apt update 
+sudo apt install mergerfs fuse3 exfatprogs
 ```
 
 ## Disk Preparation
@@ -31,7 +31,7 @@ lsblk -f
 
 ### Formatting to ext4
 
-Linux works best with the filesystem. When preparing a new drive for
+Linux works best with the `ext4` filesystem. When preparing a new drive for
 media storage, we use specific flags to maximize usable space.
 
 **Warning:** This command wipes all data on the target drive!

@@ -1185,7 +1185,7 @@ sysctl --system
 <h2 id="wireguard-configuration">WireGuard Configuration</h2>
 <p>We are using WireGuard to connect our media server with our VPS. There
 are some guides out there that ease the pain when setting up the whole
-thing - for example <a href="https://www.digitalocean.com/community/tutorials/how-to-set-up-wireguard-on-ubuntu-20-04">one for Ubuntu 20.04</a>) that can be used for other
+thing - for example <a href="https://www.digitalocean.com/community/tutorials/how-to-set-up-wireguard-on-ubuntu-20-04">one for Ubuntu 20.04</a> that can be used for other
 versons and distros as well.
 WireGuard uses asymmetric cryptography. We must generate key pairs
 (Private/Public) on both the VPS and the Home Server.</p>
@@ -1226,18 +1226,17 @@ systemctl start wg-quick@wg0
 <p>The home server acts as the client. It initiates the connection to the
 VPS and uses <code>PersistentKeepalive</code> to keep the NAT session open through the home router.</p>
 <pre><code class="language-bash"># 1. Install WireGuard on Home Server 
-sudo apt update &amp;&amp; sudo apt
-install wireguard -y
+sudo apt update &amp;&amp; sudo apt install wireguard -y
 
 # 2. Configure the Interface 
 sudo nano /etc/wireguard/wg0.conf
 </code></pre>
 <pre><code class="language-conf">[Interface] 
-# The Internal IP of the Home
-Server Address = 10.10.10.2/24 
+# The Internal IP of the Home Server
+Address = 10.10.10.2/24 
 PrivateKey = &lt;HOME_PRIVATE_KEY&gt;
 
-[Peer] \# Connection details for the VPS 
+[Peer] # Connection details for the VPS 
 PublicKey = &lt;VPS_PUBLIC_KEY&gt; 
 # The Public IP of the VPS and the custom port defined earlier 
 # Use this port or any other port you defined (keep in mind that a random port is better)
@@ -1263,13 +1262,13 @@ documentation. NPM will terminate SSL
 connections from the internet and route traffic through the WireGuard
 tunnel to the home server.</p>
 <pre><code class="language-bash"># 1. Install Docker on VPS 
-curl -fsSL https://get.docker.com \| sh
+curl -fsSL https://get.docker.com | sh
 
 # 2. Create Directory and Config 
 mkdir -p  ~/nginx-proxy &amp;&amp; cd ~/nginx-proxy 
 nano docker-compose.yml
 </code></pre>
-<pre><code class="language-conf"> services:
+<pre><code class="language-conf">services:
   app:
     image: 'jc21/nginx-proxy-manager:latest'
     restart: unless-stopped
@@ -1349,8 +1348,7 @@ port open.
 <p>Go to Cloudflare Dashboard &gt; My Profile &gt; API Tokens.</p>
 </li>
 <li>
-<p>Create a token using the <strong>Edit zone DNS</strong> template for your
-    specific domain.</p>
+<p>Create a token using the <strong>Edit zone DNS</strong> template for your specific domain.</p>
 </li>
 <li>
 <p>Copy the generated Token.</p>
@@ -1360,7 +1358,7 @@ port open.
 <p>In Nginx Proxy Manager, edit the Proxy Host:</p>
 <ul>
 <li>
-<p><strong>SSL Tab:</strong> Check \"Use a DNS Challenge\".</p>
+<p><strong>SSL Tab:</strong> Check "Use a DNS Challenges".</p>
 </li>
 <li>
 <p><strong>Provider:</strong> Cloudflare.</p>
@@ -1374,14 +1372,48 @@ dns_cloudflare_api_token = &lt;YOUR_CLOUDFLARE_TOKEN&gt;</code></p>
 <h3 id="final-firewall-rules">Final Firewall Rules</h3>
 <p>With DNS validation active, we can close Port 80. The only open ingress
 ports are now for the VPN tunnel and the encrypted HTTPS stream.</p>
-<pre><code class="language-center">  **Port**   **Protocol**   **Status**   **Reason**
-  ---------- -------------- ------------ ------------------------------
-  22         TCP            Allow        SSH Management
-  443        TCP            Allow        HTTPS Streaming
-  51821      UDP            Allow        WireGuard Tunnel
-  **80**     **TCP**        **DENY**     **Not needed (DNS-01 used)**
-  **81**     **TCP**        **DENY**     **Admin UI (Tunnel only)**
-</code></pre>
+<table>
+<thead>
+<tr>
+<th>Port</th>
+<th>Protocol</th>
+<th>Status</th>
+<th>Reason</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>22</td>
+<td>TCP</td>
+<td>Allow</td>
+<td>SSH Management</td>
+</tr>
+<tr>
+<td>443</td>
+<td>TCP</td>
+<td>Allow</td>
+<td>HTTPS Streaming</td>
+</tr>
+<tr>
+<td>51821</td>
+<td>UDP</td>
+<td>Allow</td>
+<td>WireGuard Tunnel</td>
+</tr>
+<tr>
+<td>80</td>
+<td>TCP</td>
+<td>DENY</td>
+<td>Not needed (DNS-01 used)</td>
+</tr>
+<tr>
+<td>81</td>
+<td>TCP</td>
+<td>DENY</td>
+<td>Admin UI (Tunnel only)</td>
+</tr>
+</tbody>
+</table>
 <h3 id="secure-admin-access-via-ssh-tunnel">Secure Admin Access via SSH Tunnel</h3>
 <p>To access the Nginx Proxy Manager interface in the future without
 exposing the port to the internet, we use local port forwarding.</p>
@@ -1402,22 +1434,11 @@ we implement <strong>CrowdSec</strong>.</p>
 (IPS). Unlike legacy tools like Fail2Ban,
 it works on a collaborative model:</p>
 <ol>
-<li>
-<p><strong>Detect (The Agent):</strong> It analyzes log files (Nginx, SSH, System)
-    in real-time to detect aggressive behavior.</p>
-</li>
-<li>
-<p><strong>Protect (The Bouncer):</strong> Once a threat is detected, the
-    "Bouncer" interacts with the firewall to drop the connection
-    immediately.</p>
-</li>
-<li>
-<p><strong>Share (The Crowd):</strong> When your server blocks an IP for malicious
-    activity, this information is shared with the global CrowdSec
-    community. Conversely, your server automatically receives a
-    blacklist of IPs that have attacked other users, blocking them
-    before they even touch your server.</p>
-</li>
+<li><strong>Detect (The Agent):</strong> It analyzes log files (Nginx, SSH, System) in real-time to detect aggressive behavior.</li>
+</ol>
+<p>2.<strong>Protect (The Bouncer):</strong> Once a threat is detected, the "Bouncer" interacts with the firewall to drop the connection immediately.</p>
+<ol>
+<li><strong>Share (The Crowd):</strong> When your server blocks an IP for malicious activity, this information is shared with the global CrowdSec community. Conversely, your server automatically receives a blacklist of IPs that have attacked other users, blocking them before they even touch your server.</li>
 </ol>
 <h3 id="architecture-setup">Architecture Setup</h3>
 <p>We use a hybrid setup:</p>
@@ -1426,8 +1447,7 @@ it works on a collaborative model:</p>
 <p><strong>The Agent</strong> runs inside a <strong>Docker container</strong>. It reads the logs.</p>
 </li>
 <li>
-<p><strong>The Bouncer</strong> runs directly on the <strong>Host System (VPS)</strong>. It
-    manages the <code>iptables</code> firewall rules.</p>
+<p><strong>The Bouncer</strong> runs directly on the <strong>Host System (VPS)</strong>. It manages the <code>iptables</code> firewall rules.</p>
 </li>
 </ul>
 <h3 id="1-docker-compose-modification-the-agent">1. Docker Compose Modification (The Agent)</h3>
@@ -1437,8 +1457,7 @@ it works on a collaborative model:</p>
 <p>We map the host's <code>auth.log</code> to protect SSH.</p>
 </li>
 <li>
-<p>We expose Port <code>8080</code> to localhost so the Host-Bouncer can talk to the
-    Docker-Agent.</p>
+<p>We expose Port <code>8080</code> to localhost so the Host-Bouncer can talk to the Docker-Agent.</p>
 </li>
 </ul>
 <pre><code class="language-yaml">services:
@@ -1561,7 +1580,7 @@ docker compose restart crowdsec
 <p><strong>Verification:</strong> The download of the global blocklist (CAPI) takes
 about 5-10 minutes. Afterward, verify that your server has protected
 itself against thousands of known bad actors:</p>
-<pre><code class="language-bash">\# Check the number of banned IPs from the Community List 
+<pre><code class="language-bash"># Check the number of banned IPs from the Community List 
 docker exec -t nginx-proxy-crowdsec-1 cscli decisions list --origin CAPI -a | grep -v &quot;No decisions&quot; | wc -l
 </code></pre>
 <p><em>Expected Result:</em> A number greater than <strong>15,000</strong>. If the result is 0

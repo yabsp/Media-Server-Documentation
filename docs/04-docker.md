@@ -36,18 +36,18 @@ touch docker-compose.yml
 This is the heart of the server. We edit the file:
 
 ```bash
-nano  ~/docker/docker-compose.yml
+nano ~/docker/docker-compose.yml
 ```
 
 Below is the configuration template optimized for:
 
--   **Intel i5-12600K:** QuickSync Transcoding enabled.
+- **Intel i5-12600K:** QuickSync Transcoding enabled.
 
--   **Service User:** Using UID 13000 as defined in chapter [User & Network](#02-network.md)
+- **Service User:** Using UID 13000 as defined in chapter [User & Network](#02-network.md)
 
--   **Hardlinks:** Optimized volume mapping for instant moves.
+- **Hardlinks:** Optimized volume mapping for instant moves.
 
--   **Security:** Plex gets Read-Only access.
+- **Security:** Plex gets Read-Only access.
 
 ```yaml
 services:
