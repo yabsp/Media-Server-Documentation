@@ -98,16 +98,22 @@ level later.
 ## Network Configuration
 
 Since this is a server, it needs a static IP. In my case I added the
-following interface.
+following interface:
+
+```bash
+# Edit the file /etc/network/interfaces
+sudo nano /etc/network/interfaces
+```
+And add:
 
 ```conf
-# The primary network interface allow-hotplug
-/etc/network/interfaces
-enp4s0 iface enp4s0 inet static 
-        address 192.168.0.50 
-        netmask 55.255.255.0 
-        gateway 192.168.0.1 
-        dns-nameservers 1.1.1.1 8.8.8.8
+# The primary network interface
+allow-hotplug enp4s0
+iface enp4s0 inet static
+	address 192.168.0.50
+	netmask 255.255.255.0
+	gateway 192.168.0.1
+	dns-nameservers 1.1.1.1 8.8.88.8
 ```
 
 - `allow-hotplug`: Tells the system to start the network interface enp4s0 as soon as
