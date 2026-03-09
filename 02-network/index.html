@@ -1232,6 +1232,8 @@ groups=13000(media)
 <h3 id="granting-access-to-the-admin-user">Granting Access to the Admin User</h3>
 <p>To ensure that we (the logged-in admin) can still manually manage files
 in the storage pool, we add our current user to the new group.</p>
+<pre><code class="language-bash">sudo usermod -a -G media joachim
+</code></pre>
 <h3 id="applying-filesystem-permissions">Applying Filesystem Permissions</h3>
 <p>We transfer ownership of the data directory to the new user and group.
 We set permissions to , allowing full access to both the service user
