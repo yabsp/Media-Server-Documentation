@@ -869,24 +869,24 @@ absolutely be no problem for what we are planning with our server.</p>
 <h2 id="prerequisites">Prerequisites</h2>
 <p>We need the necessary software packages to handle the pool and different
 filesystems (like exFAT for migration).</p>
-<pre><code class="language-bash"># Install MergerFS and filesystem tools 
-sudo apt update 
-sudo apt install mergerfs fuse3 exfatprogs
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Install MergerFS and filesystem tools </span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>sudo<span class="w"> </span>apt<span class="w"> </span>update<span class="w"> </span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>mergerfs<span class="w"> </span>fuse3<span class="w"> </span>exfatprogs
+</code></pre></div>
 <h2 id="disk-preparation">Disk Preparation</h2>
 <h3 id="identifying-drives">Identifying Drives</h3>
 <p>Before formatting, we must identify the correct device identifiers
 (e.g., <code>/dev/sda</code>, <code>/dev/sdb</code>).</p>
-<pre><code class="language-bash"># List block devices and their file systems 
-lsblk -f
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># List block devices and their file systems </span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>lsblk<span class="w"> </span>-f
+</code></pre></div>
 <h3 id="formatting-to-ext4">Formatting to ext4</h3>
 <p>Linux works best with the <code>ext4</code> filesystem. When preparing a new drive for
 media storage, we use specific flags to maximize usable space.</p>
 <p><strong>Warning:</strong> This command wipes all data on the target drive!</p>
-<pre><code class="language-bash"># Format the drive (Replace sdX with actual identifier)
-sudo mkfs.ext4 -m 0 -L disk1 /dev/sdX
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Format the drive (Replace sdX with actual identifier)</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>sudo<span class="w"> </span>mkfs.ext4<span class="w"> </span>-m<span class="w"> </span><span class="m">0</span><span class="w"> </span>-L<span class="w"> </span>disk1<span class="w"> </span>/dev/sdX
+</code></pre></div>
 <p><strong>Parameter Explanation:</strong></p>
 <ul>
 <li>
@@ -903,35 +903,35 @@ sudo mkfs.ext4 -m 0 -L disk1 /dev/sdX
 <p>We do not mount drives using their device name (e.g., <code>/dev/sdb</code>) because these
 names can change after a reboot. Instead, we use the <strong>UUID</strong>.</p>
 <h3 id="getting-the-uuid">Getting the UUID</h3>
-<pre><code class="language-bash"># Display UUIDs for all partitions 
-sudo blkid
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># Display UUIDs for all partitions </span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>sudo<span class="w"> </span>blkid
+</code></pre></div>
 <p><em>Copy the UUID string (without quotes) for the next step. If you are
 doing this in a shell only environment but have a mouse available you
 might wanna use <a href="https://linux.die.net/man/8/gpm"><code>gpm</code></a> to copy and paste.</em></p>
 <h3 id="configuring-fstab">Configuring fstab</h3>
 <p>We edit to mount the drives automatically at boot.</p>
-<pre><code class="language-bash"># Create mount points first 
-sudo mkdir -p /mnt/disk1 
-sudo mkdir -p /mnt/disk2
-
-# Edit the file system table 
-sudo nano /etc/fstab
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># Create mount points first </span>
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>sudo<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/mnt/disk1<span class="w"> </span>
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>sudo<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/mnt/disk2
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="c1"># Edit the file system table </span>
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>sudo<span class="w"> </span>nano<span class="w"> </span>/etc/fstab
+</code></pre></div>
 <p>Add the following lines for the physical disks:</p>
-<pre><code class="language-conf"># Physical Disk 1 
-UUID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx /mnt/disk1 ext4 defaults 0 2
-
-# Physical Disk 2 
-UUID=yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy /mnt/disk2 ext4 defaults 0 2
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a># Physical Disk 1 
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>UUID=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx /mnt/disk1 ext4 defaults 0 2
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a># Physical Disk 2 
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>UUID=yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy /mnt/disk2 ext4 defaults 0 2
+</code></pre></div>
 <h2 id="the-mergerfs-pool">The MergerFS Pool</h2>
 <p>Finally, we define the virtual pool that combines <code>/mnt/disk1</code>, <code>/mnt/disk2</code>, etc., into <code>/mnt/data</code>.</p>
 <p>Add this line to the end of :</p>
-<pre><code class="language-conf"># MergerFS Pool
-# Syntax: branches mount_point type options dump pass 
-/mnt/disk* /mnt/data fuse.mergerfs defaults,nonempty,allow_other,use_ino,category.create=mfs,minfreespace=10G,fsname=mergerfs 0 0
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a># MergerFS Pool
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a># Syntax: branches mount_point type options dump pass 
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>/mnt/disk* /mnt/data fuse.mergerfs defaults,nonempty,allow_other,use_ino,category.create=mfs,minfreespace=10G,fsname=mergerfs 0 0
+</code></pre></div>
 <h3 id="understanding-the-mergerfs-arguments">Understanding the MergerFS Arguments</h3>
 <ul>
 <li>
@@ -964,15 +964,15 @@ UUID=yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy /mnt/disk2 ext4 defaults 0 2
 </ul>
 <h2 id="applying-changes">Applying Changes</h2>
 <p>Once <code>fstab</code> is saved, create the pool directory and mount everything.</p>
-<pre><code class="language-bash"># Create the pool mount point 
-sudo mkdir -p /mnt/data
-
-# Mount all filesystems listed in fstab 
-sudo mount -a
-
-# Verify the pool size (Should be sum of disk1 + disk2) 
-df -h /mnt/data
-</code></pre>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># Create the pool mount point </span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>sudo<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/mnt/data
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="c1"># Mount all filesystems listed in fstab </span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>sudo<span class="w"> </span>mount<span class="w"> </span>-a
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="c1"># Verify the pool size (Should be sum of disk1 + disk2) </span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>df<span class="w"> </span>-h<span class="w"> </span>/mnt/data
+</code></pre></div>
 
 
 
