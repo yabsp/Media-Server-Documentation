@@ -113,7 +113,7 @@ iface enp4s0 inet static
 	address 192.168.0.50
 	netmask 255.255.255.0
 	gateway 192.168.0.1
-	dns-nameservers 1.1.1.1 8.8.88.8
+	dns-nameservers 1.1.1.1 8.8.8.8
 ```
 
 - `allow-hotplug`: Tells the system to start the network interface enp4s0 as soon as

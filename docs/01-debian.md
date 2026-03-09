@@ -26,5 +26,5 @@ During the installation process, Debian asks for a `root` password.
 
 In the *tasksel* menu (blue screen near the end), we select:
 
-1. SSH Server (Crucial for remote access), if you did not select this refer to [ssh-server-installation](02-network.md#ssh-server-installation) for the SSH server installation.
+1. SSH Server (Crucial for remote access), if you did not select this refer to [User & Network](02-network.md#ssh-server-installation) for the SSH server installation.
 2. Standard System Utilities
