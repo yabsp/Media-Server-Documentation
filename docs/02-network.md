@@ -306,7 +306,7 @@ sudo ufw allow from 192.168.0.1/24 to any port 6789 proto tcp
 
 ### Enabling the Firewall
 
-**Warning:** Ensure the SSH rule (Section 2.6.1) matches your current IP
+**Warning:** Ensure the SSH rule (Section [SSH Server Installation](02-network.md#ssh-server-installation)) matches your current IP
 address, or you might lock yourself out immediately.
 
 ```bash
