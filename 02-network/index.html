@@ -1264,14 +1264,18 @@ level later.</p>
 </ul>
 <h2 id="network-configuration">Network Configuration</h2>
 <p>Since this is a server, it needs a static IP. In my case I added the
-following interface.</p>
-<pre><code class="language-conf"># The primary network interface allow-hotplug
-/etc/network/interfaces
-enp4s0 iface enp4s0 inet static 
-        address 192.168.0.50 
-        netmask 55.255.255.0 
-        gateway 192.168.0.1 
-        dns-nameservers 1.1.1.1 8.8.8.8
+following interface:</p>
+<pre><code class="language-bash"># Edit the file /etc/network/interfaces
+sudo nano /etc/network/interfaces
+</code></pre>
+<p>And add:</p>
+<pre><code class="language-conf"># The primary network interface
+allow-hotplug enp4s0
+iface enp4s0 inet static
+    address 192.168.0.50
+    netmask 255.255.255.0
+    gateway 192.168.0.1
+    dns-nameservers 1.1.1.1 8.8.88.8
 </code></pre>
 <ul>
 <li>
