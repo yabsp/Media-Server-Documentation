@@ -669,17 +669,6 @@
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#security-hardening_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Security Hardening
-      
-    </span>
-  </a>
-  
     <nav class="md-nav" aria-label="Security Hardening">
       <ul class="md-nav__list">
         
@@ -983,17 +972,6 @@
     </span>
   </a>
   
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#security-hardening_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Security Hardening
-      
-    </span>
-  </a>
-  
     <nav class="md-nav" aria-label="Security Hardening">
       <ul class="md-nav__list">
         
@@ -1207,7 +1185,7 @@ Peer.</p>
 <a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>PrivateKey = &lt;VPS_PRIVATE_KEY&gt;
 <a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>
 <a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a># IP Masquerading Rules (NAT)
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a># These rules ensure traffic leaving the VPS interface (eth0) appears to come from the VPS IP, \
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a># These rules ensure traffic leaving the VPS interface (eth0) appears to come from the VPS IP,
 <a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a># enabling the return path for traffic originating from the Home Server. 
 <a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>PostUp = iptables -A FORWARD -i %i -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
 <a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE
@@ -1337,10 +1315,9 @@ tunnel to the home server.</p>
 <h2 id="security-hardening">Security Hardening</h2>
 <p>Once the Proxy Host is configured and confirmed working, we must secure
 the VPS by closing the administration port.</p>
-<h2 id="security-hardening_1">Security Hardening</h2>
 <p>We switch the SSL validation method to "DNS Challenge". This would
 allow us to close Port 80 completely, leaving only the encrypted HTTPS
-port open.
+port open. <br>
 <em>Note:</em> We are using cloudflare here.</p>
 <h3 id="cloudflare-api-token">Cloudflare API Token</h3>
 <ol>
@@ -1428,17 +1405,21 @@ even over public WiFi.</p>
 <p>Since we bypass Cloudflare's proxy (Orange Cloud) to allow direct
 streaming, the VPS IP address is exposed to the public internet. To
 protect the server against scanners, brute-force attacks, and botnets,
-we implement <strong>CrowdSec</strong>.</p>
+we make use of <strong>CrowdSec</strong>.</p>
 <h3 id="what-is-crowdsec">What is CrowdSec?</h3>
 <p><a href="https://docs.crowdsec.net/u/getting_started/installation/linux/">CrowdSec</a> is a modern, open-source Intrusion Prevention System
 (IPS). Unlike legacy tools like Fail2Ban,
 it works on a collaborative model:</p>
 <ol>
-<li><strong>Detect (The Agent):</strong> It analyzes log files (Nginx, SSH, System) in real-time to detect aggressive behavior.</li>
-</ol>
-<p>2.<strong>Protect (The Bouncer):</strong> Once a threat is detected, the "Bouncer" interacts with the firewall to drop the connection immediately.</p>
-<ol>
-<li><strong>Share (The Crowd):</strong> When your server blocks an IP for malicious activity, this information is shared with the global CrowdSec community. Conversely, your server automatically receives a blacklist of IPs that have attacked other users, blocking them before they even touch your server.</li>
+<li>
+<p><strong>Detect (The Agent):</strong> It analyzes log files (Nginx, SSH, System) in real-time to detect aggressive behavior.</p>
+</li>
+<li>
+<p><strong>Protect (The Bouncer):</strong> Once a threat is detected, the "Bouncer" interacts with the firewall to drop the connection immediately.</p>
+</li>
+<li>
+<p><strong>Share (The Crowd):</strong> When your server blocks an IP for malicious activity, this information is shared with the global CrowdSec community. Conversely, your server automatically receives a blacklist of IPs that have attacked other users, blocking them before they even touch your server.</p>
+</li>
 </ol>
 <h3 id="architecture-setup">Architecture Setup</h3>
 <p>We use a hybrid setup:</p>

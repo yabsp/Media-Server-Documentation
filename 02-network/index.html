@@ -1411,7 +1411,7 @@ restrict them to the local network.</p>
 <a id="__codelineno-19-11" name="__codelineno-19-11" href="#__codelineno-19-11"></a><span class="c1"># NZBGet / SABnzbd (6789) </span>
 <a id="__codelineno-19-12" name="__codelineno-19-12" href="#__codelineno-19-12"></a>sudo<span class="w"> </span>ufw<span class="w"> </span>allow<span class="w"> </span>from<span class="w"> </span><span class="m">192</span>.168.0.1/24<span class="w"> </span>to<span class="w"> </span>any<span class="w"> </span>port<span class="w"> </span><span class="m">6789</span><span class="w"> </span>proto<span class="w"> </span>tcp
 </code></pre></div>
-<p><strong>Note</strong>: Since we are using docker to deploy these tools we don't really need to allow these ports as is allowed docker to bypass ufw rules.</p>
+<p><em>Note</em>: Since we are using docker to deploy these tools we don't really need to allow these ports as is allowed docker to bypass ufw rules.</p>
 <h3 id="enabling-the-firewall">Enabling the Firewall</h3>
 <p><strong>Warning:</strong> Ensure the SSH rule (Section <a href="./#ssh-server-installation">SSH Server Installation</a>) matches your current IP
 address, or you might lock yourself out immediately.</p>
